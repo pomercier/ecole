@@ -1,11 +1,14 @@
-from flask import Flask
+import requests
+import json
+import pandas as pd
 
-app = Flask(__name__)
+url = "https://www.tvanouvelles.ca/api/schools/closed"
+response = requests.get(url)
+data = response.json()["result"]["institutions"]
 
-@app.route('/')
-def home():
-    return 'Hello, World!'
-
-@app.route('/about')
-def about():
-    return 'About'
+df = pd.json_normalize(data)
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+pd.set_option('display.width', None)
+pd.set_option('display.max_colwidth', None)
+df
